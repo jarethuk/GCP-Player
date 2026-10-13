@@ -1,0 +1,8 @@
+# Archive and export output from `xcodebuild archive` / `-exportArchive`.
+build/
+
+.DS_Store
+
+# Xcode window and editor state: per-machine, and noise in every diff.
+**/xcuserdata/
+.idea

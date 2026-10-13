@@ -1,0 +1,10 @@
+Deliberately empty, and deliberately committed.
+
+Turning the framework preset off makes Vercel treat this project as a plain
+build, so after the build command it looks for a static output directory and
+fails the deploy if there isn't one. This API emits no static files — the build
+only generates the Prisma client, migrates and seeds — so this directory exists
+to be found and left alone. Nothing is ever served from it: the rewrite in
+vercel.json sends every path to the function.
+
+See "An empty public/, and why it has to exist" in ../README.md.

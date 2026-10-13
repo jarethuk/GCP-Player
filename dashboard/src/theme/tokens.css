@@ -1,0 +1,31 @@
+/*
+ * The names the dashboard's remaining CSS modules use, as aliases of the
+ * shared theme in web-components/src/theme.css. The values live there, once,
+ * for the web app and the dashboard both; this only maps old names on to them.
+ */
+
+:root {
+  --ink: var(--color-ink);
+  --ink-deep: var(--color-ink-deep);
+  --surface: var(--color-surface);
+  --surface-raised: var(--color-surface-raised);
+  --sky: var(--color-sky);
+  --bone: var(--color-bone);
+  --muted: var(--color-muted);
+  --ember: var(--color-ember);
+  --moss: var(--color-moss);
+  --line: var(--color-line);
+  --line-strong: var(--color-line-strong);
+
+  --gap-xs: 4px;
+  --gap-sm: 8px;
+  --gap: 12px;
+  --gap-md: 16px;
+  --gap-lg: 24px;
+  --gap-xl: 40px;
+
+  /* The apps' shapes: 10 for a card or row, 8 for a button or field, 5 for a chip. */
+  --radius-sm: 5px;
+  --radius: 8px;
+  --radius-lg: 10px;
+}

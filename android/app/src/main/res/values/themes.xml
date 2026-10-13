@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+      The launch theme: what the system paints before a single frame of the
+      app exists. The iOS app shows the network's wordmark on the navy; this
+      is the same screen, built the way Android 12+ wants it.
+    -->
+    <style name="Theme.GcpPlayer.Launch" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/ink</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_logo</item>
+        <item name="postSplashScreenTheme">@style/Theme.GcpPlayer</item>
+    </style>
+
+    <!--
+      The activity theme proper. Dark-only, like the rest of the app: the
+      navy is the identity, and a light variant would strand it.
+    -->
+    <style name="Theme.GcpPlayer" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@color/ink</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+</resources>

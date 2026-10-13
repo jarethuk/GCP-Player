@@ -1,0 +1,14 @@
+*.iml
+.gradle/
+local.properties
+.idea/
+.DS_Store
+build/
+captures/
+.externalNativeBuild
+.cxx
+
+# Signing keys. The real one lives outside the repo; this is a backstop
+# so a stray copy can never be committed.
+*.jks
+*.keystore

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!-- TestFlight and the App Store are the same upload; "app-store-connect"
+         is what Xcode 15 renamed the old "app-store" method to. -->
+    <key>method</key>
+    <string>app-store-connect</string>
+    <key>teamID</key>
+    <string>4TU829QS8N</string>
+    <key>signingStyle</key>
+    <string>automatic</string>
+    <!-- Ship the dSYM so crash reports from testers symbolicate. -->
+    <key>uploadSymbols</key>
+    <true/>
+    <!-- Xcode manages the build number itself only when asked; this project
+         sets CURRENT_PROJECT_VERSION by hand, so leave it alone. -->
+    <key>manageAppVersionAndBuildNumber</key>
+    <false/>
+</dict>
+</plist>

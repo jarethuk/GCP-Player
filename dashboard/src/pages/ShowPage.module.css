@@ -1,0 +1,71 @@
+.hero {
+  display: flex;
+  gap: var(--gap-lg);
+  align-items: flex-start;
+}
+
+.heroText {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+  min-width: 0;
+}
+
+.description {
+  font-size: 13.5px;
+  color: var(--muted);
+  max-width: 66ch;
+}
+
+.meta {
+  display: flex;
+  gap: var(--gap-md);
+  flex-wrap: wrap;
+}
+
+/* Fixed width whatever it holds, so a list never mixes two row heights —
+   most of the network's shows publish no numbering at all. */
+.chip {
+  display: inline-block;
+  min-width: 68px;
+  padding: 4px 8px;
+  border-radius: 5px;
+  background: rgb(124 192 223 / 0.07);
+  border: 1px solid var(--line);
+  font-family: var(--font-display);
+  font-size: 10px;
+  line-height: 13px;
+  text-align: center;
+  color: var(--sky);
+  font-variant-numeric: tabular-nums;
+}
+
+/* A number the API invented from release order rather than read from a feed. */
+.derived {
+  border-style: dashed;
+  color: rgb(124 192 223 / 0.7);
+}
+
+.episodeTitle {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+/* The title and whatever has to be said about it, on one line. */
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  min-width: 0;
+}
+
+.raw {
+  font-size: 11px;
+  color: rgb(157 184 204 / 0.7);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 48ch;
+}

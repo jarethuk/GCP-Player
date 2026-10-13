@@ -1,0 +1,60 @@
+/*
+ * The dashboard's styles: the theme the web app is drawn in, shared through
+ * web-components, and the few ground rules that are the dashboard's own.
+ */
+
+@import "tailwindcss";
+@import "@gcp/web-components/theme.css";
+@import "./theme/tokens.css";
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    /* The network's section gradient, fixed so it doesn't repeat down a long
+       table — the web app's page background too. */
+    background: var(--color-ink) linear-gradient(115.55deg, #03253f 7.6%, #043559 75.9%) fixed;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  /* The display face reads as shouting by design, so it is only ever caps. */
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    line-height: 1.15;
+    color: var(--color-bone);
+  }
+
+  h2 {
+    font-size: 15px;
+  }
+
+  h3 {
+    font-size: 13px;
+  }
+
+  a {
+    color: var(--color-sky);
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  code {
+    font-size: 0.9em;
+    color: var(--color-sky);
+  }
+
+  ::selection {
+    background: var(--color-sky);
+    color: var(--color-ink-deep);
+  }
+}

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  What Android's own backup carries to a new phone: the library database —
+  played, positions, starred shows and the Patreon feed token — and the
+  preferences beside it. The nearest thing this app has to the iPhone app's
+  iCloud sync: not live, but a phone set up from this one's backup comes up
+  with the same history and Patreon already unlocked.
+
+  Deliberately left out: the downloaded audio and Media3's index of it.
+  Auto Backup gives up entirely past 25 MB, and one episode is 50–90 MB —
+  before these rules existed, no backup of this app ever succeeded. Audio can
+  always be fetched again.
+
+  An allow-list rather than exclusions, so nothing added later is swept up by
+  accident. Android 12+ encrypts cloud backups end to end where the phone has
+  a screen lock, which is what makes it an acceptable home for the token.
+-->
+<data-extraction-rules>
+    <cloud-backup>
+        <include domain="database" path="gcp.db" />
+        <include domain="file" path="datastore/" />
+    </cloud-backup>
+    <device-transfer>
+        <include domain="database" path="gcp.db" />
+        <include domain="file" path="datastore/" />
+    </device-transfer>
+</data-extraction-rules>

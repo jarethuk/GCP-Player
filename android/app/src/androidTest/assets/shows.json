@@ -1,0 +1,39 @@
+{
+  "syncedAt": "2026-09-18T13:30:25.528Z",
+  "fullResync": true,
+  "shows": [
+    {
+      "id": "cmu6x2awz010o0qri0cz91lx0",
+      "slug": "side-quest-side-sesh",
+      "title": "Side Quest Side Sesh",
+      "system": "Pathfinder 2E",
+      "description": null,
+      "artworkUrl": "https://megaphone.imgix.net/podcasts/92e9619a-5f58-11f1-9d05-6f0fcf10b035/image/b4635a117c14cc11cbfb3019faee51af.png?ixlib=rails-4.3.1&max-w=3000&max-h=3000&fit=crop&auto=format,compress",
+      "createdAt": "2026-09-18T12:10:12.035Z",
+      "updatedAt": "2026-09-18T12:10:12.035Z",
+      "deletedAt": null
+    },
+    {
+      "id": "cmu6x2awz010q0qri5xzbbc2w",
+      "slug": "the-glass-cannon-podcast-gatewalkers",
+      "title": "The Glass Cannon Podcast Gatewalkers",
+      "system": "Pathfinder 2E",
+      "description": null,
+      "artworkUrl": "https://megaphone.imgix.net/podcasts/6a4a34c8-4113-11ee-b6a4-27fbbf15d5ee/image/c20249e5141db5a916aa90e43f9ddf66.jpg?ixlib=rails-4.3.1&max-w=3000&max-h=3000&fit=crop&auto=format,compress",
+      "createdAt": "2026-09-18T12:10:12.035Z",
+      "updatedAt": "2026-09-18T12:10:12.035Z",
+      "deletedAt": null
+    },
+    {
+      "id": "cmu6x2awz010r0qrir2ysaqbe",
+      "slug": "glass-cannon-live-session-zero",
+      "title": "Glass Cannon Live! Session Zero",
+      "system": "Pathfinder 2E Ascension",
+      "description": null,
+      "artworkUrl": "https://megaphone.imgix.net/podcasts/5b607116-eb0d-11ef-956a-3f164118ebe9/image/815084e02f8516f43d71b6c30c5872f1.jpg?ixlib=rails-4.3.1&max-w=3000&max-h=3000&fit=crop&auto=format,compress",
+      "createdAt": "2026-09-18T12:10:12.035Z",
+      "updatedAt": "2026-09-18T12:10:12.035Z",
+      "deletedAt": null
+    }
+  ]
+}

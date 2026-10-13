@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  copy.xml is generated from copy/strings.yaml, which is shared with the iOS,
+  iPad and Apple TV apps: the strings only they use are expected to be unused
+  here, and its wording is settled in the YAML rather than by lint.
+-->
+<lint>
+    <issue id="UnusedResources">
+        <ignore path="src/main/res/values/copy.xml" />
+    </issue>
+    <issue id="PluralsCandidate">
+        <ignore path="src/main/res/values/copy.xml" />
+    </issue>
+</lint>

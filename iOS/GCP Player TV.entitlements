@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!--
+	  The same iCloud container as the phone and iPad — that shared container
+	  is the whole of how the TV knows where you got to. The bundle id is the
+	  iOS app's too, which makes this one App Store product across platforms
+	  (universal purchase). See GCP Player.entitlements for what each key does.
+
+	  No CarPlay key: there is no car.
+	-->
+	<key>com.apple.developer.icloud-services</key>
+	<array>
+		<string>CloudKit</string>
+	</array>
+	<key>com.apple.developer.icloud-container-identifiers</key>
+	<array>
+		<string>iCloud.bencreswell.gcpplayer</string>
+	</array>
+	<key>aps-environment</key>
+	<string>development</string>
+</dict>
+</plist>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Auto Backup, for Android 11 and below. See data_extraction_rules.xml for
+  why the lists are what they are; the two files must say the same thing.
+-->
+<full-backup-content>
+    <include domain="database" path="gcp.db" />
+    <include domain="file" path="datastore/" />
+</full-backup-content>

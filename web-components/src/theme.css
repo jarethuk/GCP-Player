@@ -1,0 +1,208 @@
+/*
+ * The Glass Cannon Network's visual language, as Tailwind 4 theme tokens —
+ * shared by the web app and the dashboard, so the two can't drift.
+ *
+ * The same values as iOS/GCP Player/Theme.swift, which read them off
+ * glasscannonnetwork.com — and here the two gradients are the site's own CSS,
+ * angle and stops, rather than the approximation SwiftUI needs.
+ *
+ * Open Sans is the site's body face; its display face is Babell, which isn't
+ * licensed for this, so Archivo Black stands in. The files are in ../fonts,
+ * the same ones the iOS app bundles, and each app's build hashes and serves
+ * them itself.
+ *
+ * Dark only, by design: the network has no light mode, and a light variant
+ * would strand the navy that carries the identity.
+ *
+ * An app imports it after Tailwind:
+ *
+ *     @import "tailwindcss";
+ *     @import "@gcp/web-components/theme.css";
+ */
+
+/* The components' own classes, so an app's build generates them. */
+@source "./";
+
+@font-face {
+  font-family: "Archivo Black";
+  font-weight: 400;
+  font-display: swap;
+  src: url("../fonts/ArchivoBlack-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Open Sans";
+  font-weight: 400;
+  font-display: swap;
+  src: url("../fonts/OpenSans-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Open Sans";
+  font-weight: 600;
+  font-display: swap;
+  src: url("../fonts/OpenSans-SemiBold.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Open Sans";
+  font-weight: 700;
+  font-display: swap;
+  src: url("../fonts/OpenSans-Bold.ttf") format("truetype");
+}
+
+@theme static {
+  /* The network's page background. */
+  --color-ink: #03253f;
+  /* Below the ground: bars, the player's chrome. */
+  --color-ink-deep: #021a2e;
+  /* Rows and cards, one step up from the ground. */
+  --color-surface: #06304f;
+  /* Hairlines and borders: the accent at low opacity, never grey. */
+  --color-line: rgb(124 192 223 / 0.16);
+  --color-sky: #7cc0df;
+  --color-bone: #eaf2f8;
+  /* Secondary text: a neutral biased toward the accent. */
+  --color-muted: #9db8cc;
+  /* Semantic only: something needs a person — in the apps, a show with
+     something unheard. Never decoration. */
+  --color-ember: #e2483c;
+  /* One step further up than surface: a card on a card, an input well. */
+  --color-surface-raised: #0a3d63;
+  /* A sync that finished cleanly. The one green in the dashboard. */
+  --color-moss: #4caf7d;
+  /* A hairline that has to hold its own: an input's edge, a scrollbar. */
+  --color-line-strong: rgb(124 192 223 / 0.32);
+
+  --font-display: "Archivo Black", "Arial Black", system-ui, sans-serif;
+  --font-body: "Open Sans", system-ui, -apple-system, sans-serif;
+
+  --animate-push: push 0.32s cubic-bezier(0.2, 0.8, 0.2, 1);
+  --animate-pop: pop 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+  --animate-fade-in: fade-in 0.2s ease-out;
+  --animate-sheet-up: sheet-up 0.34s cubic-bezier(0.2, 0.9, 0.25, 1);
+  --animate-dialog-in: dialog-in 0.22s cubic-bezier(0.2, 0.9, 0.25, 1);
+
+  @keyframes push {
+    from {
+      transform: translateX(28%);
+      opacity: 0.4;
+    }
+  }
+  @keyframes pop {
+    from {
+      transform: translateX(-12%);
+      opacity: 0.6;
+    }
+  }
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+  }
+  @keyframes sheet-up {
+    from {
+      transform: translateY(100%);
+    }
+  }
+  @keyframes dialog-in {
+    from {
+      transform: scale(0.94);
+      opacity: 0;
+    }
+  }
+}
+
+/* The site's button gradient, 118.64°. It marks the thing that plays. */
+@utility bg-accent-gradient {
+  background-image: linear-gradient(
+    118.64deg,
+    #66c4ef 14.5%,
+    #5dbbe7 25.8%,
+    #47a2d2 43.5%,
+    #237bb0 66.1%,
+    #00548e 85.1%
+  );
+}
+
+/* The site's section gradient, 115.55°. The app's page background. */
+@utility bg-ground-gradient {
+  background-image: linear-gradient(115.55deg, #03253f 7.6%, #043559 75.9%);
+}
+
+/* iOS 26's glass controls, over artwork or the page. */
+@utility glass {
+  background-color: rgb(6 48 79 / 0.55);
+  backdrop-filter: blur(14px) saturate(1.4);
+  -webkit-backdrop-filter: blur(14px) saturate(1.4);
+  box-shadow:
+    inset 0 0 0 1px rgb(124 192 223 / 0.22),
+    0 6px 18px rgb(0 0 0 / 0.25);
+}
+
+/* The site's metadata treatment: bold, uppercase, widely tracked. */
+@utility meta {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 9.5px;
+  line-height: 1.35;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+}
+
+@utility pb-safe {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+@utility pt-safe {
+  padding-top: env(safe-area-inset-top);
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+    background-color: var(--color-ink);
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    min-height: 100dvh;
+    background-color: var(--color-ink);
+    color: var(--color-bone);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overscroll-behavior-y: none;
+  }
+
+  button {
+    cursor: pointer;
+  }
+
+  button:disabled {
+    cursor: default;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-sky);
+    outline-offset: 2px;
+  }
+
+  /* Scrollbars that belong to the navy rather than the OS. */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(124 192 223 / 0.22) transparent;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    /* biome-ignore lint/complexity/noImportantStyles: reduced motion has to win over every animation */
+    animation-duration: 0.01ms !important;
+    /* biome-ignore lint/complexity/noImportantStyles: as above */
+    transition-duration: 0.01ms !important;
+  }
+}

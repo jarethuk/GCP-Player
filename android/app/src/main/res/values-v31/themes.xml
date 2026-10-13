@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+      From API 31 the platform can put a branding image at the foot of the
+      splash, which is where the network's wordmark goes — the same thing
+      the iOS launch screen shows. The compat library has no equivalent, so
+      devices on 26–30 get the d20 mark alone.
+    -->
+    <style name="Theme.GcpPlayer.Launch" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/ink</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_logo</item>
+        <item name="android:windowSplashScreenBrandingImage">@drawable/launch_logo</item>
+        <item name="postSplashScreenTheme">@style/Theme.GcpPlayer</item>
+    </style>
+</resources>

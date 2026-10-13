@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <!--
+      Merged into the debug variant only, so a release build keeps Android's
+      default refusal of cleartext with nothing to opt out of it.
+
+      The ignore repeats the main manifest's: lint checks each variant's
+      <application> node separately, and voice search is deliberately not
+      built (see README section 10).
+    -->
+    <application
+        android:networkSecurityConfig="@xml/network_security_config"
+        tools:ignore="MissingIntentFilterForMediaSearch" />
+</manifest>

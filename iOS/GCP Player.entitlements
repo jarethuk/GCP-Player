@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!--
+	  CarPlay audio, granted by Apple for this bundle id and enabled on it in
+	  the developer portal. Drives CarPlaySceneDelegate, in a real car and in
+	  Simulator ▸ I/O ▸ External Displays ▸ CarPlay alike.
+
+	  If a device build ever fails with "Entitlement
+	  com.apple.developer.carplay-audio not found and could not be included
+	  in profile", the provisioning profile predates the grant: regenerate it
+	  (Xcode does this with -allowProvisioningUpdates) rather than removing
+	  the key.
+	-->
+	<key>com.apple.developer.carplay-audio</key>
+	<true/>
+	<!--
+	  iCloud, for the listening state CloudSyncEngine carries between the
+	  user's devices: what has been played, where you had got to, and which
+	  shows are starred. Nothing else goes up — the catalogue comes from the
+	  API on every device, and downloaded audio can't cross.
+
+	  The container has to exist in the developer portal before any of this
+	  runs; adding the iCloud capability in Xcode creates it. Its identifier
+	  is repeated in CloudSyncEngine.containerIdentifier, and a mismatch
+	  shows up only as CloudKit refusing to find the container at runtime.
+	-->
+	<key>com.apple.developer.icloud-services</key>
+	<array>
+		<string>CloudKit</string>
+	</array>
+	<key>com.apple.developer.icloud-container-identifiers</key>
+	<array>
+		<string>iCloud.bencreswell.gcpplayer</string>
+	</array>
+	<!--
+	  CKSyncEngine is push-driven: CloudKit sends a silent notification when
+	  another device writes, and the engine listens for it itself — there is
+	  no notification handling anywhere in this app, and there shouldn't be.
+	  Xcode adds this key with the iCloud capability.
+
+	  "development" is right in this file: the distribution export rewrites
+	  it to production. A Simulator can't register for remote notifications
+	  at all, so changes land there only when the app foregrounds and asks.
+	-->
+	<key>aps-environment</key>
+	<string>development</string>
+</dict>
+</plist>

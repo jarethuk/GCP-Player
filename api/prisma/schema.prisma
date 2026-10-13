@@ -1,0 +1,283 @@
+// GCP Player — API schema
+//
+// The Glass Cannon Network publishes into nine RSS feeds; this database is
+// the reconciled result, and the source of truth the phone apps sync from.
+//
+// The one rule that shapes everything here: **`updatedAt` moves only when the
+// row genuinely changed.** That is what the delta endpoints need it to mean —
+// a nightly run against an unchanged catalogue must write nothing, or every
+// phone re-downloads 1,300 rows a day.
+//
+// Ingest used to get that by being insert-only: a published episode was
+// assumed never to change, so the cron only ever added rows it had not seen.
+// That assumption was wrong — the network does edit published items, and a
+// correction made upstream could never reach a phone. So ingest now
+// reconciles, and two columns carry the weight the additive rule used to:
+//
+//   - `hash` fingerprints the row as the feed says it should be, so a run can
+//     tell a real change from the 1,300 rows that are the same as yesterday
+//     and write only the difference.
+//   - `overridden` marks a row a person has edited. Ingest never touches one
+//     again. This is what used to be implicit in never rewriting anything —
+//     now it is a column, and it protects an edit against a feed that would
+//     otherwise overwrite it on the next run.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Prisma 7 keeps connection URLs out of the schema: migrations read them
+// from prisma.config.ts, and the runtime connects through the driver adapter
+// in src/db.ts.
+datasource db {
+  provider = "postgresql"
+}
+
+/// A feed the ingest reads. In the database rather than in code so the
+/// network adding a show doesn't need a deploy — and so the one that
+/// currently 404s can be switched off without one either.
+model FeedSource {
+  id        String  @id @default(cuid())
+  url       String  @unique
+  /// A short label for logs and sync results.
+  name      String
+  /// The show every item in this feed belongs to. Null for the main
+  /// Megaphone feed, which interleaves the whole network and encodes the
+  /// show in each item's title instead.
+  showTitle String?
+  /// Applied in ascending order. The main feed must sort first: the network
+  /// cross-posts, and the copy that gets inserted is the first one seen.
+  sortIndex Int     @default(0)
+  isEnabled Boolean @default(true)
+
+  lastFetchedAt DateTime? @db.Timestamptz(3)
+  lastError     String?
+
+  @@index([isEnabled, sortIndex])
+  @@map("feed_sources")
+}
+
+model Show {
+  id    String @id @default(cuid())
+  slug  String @unique
+  /// Exactly as it appears in the middle segment of a feed item's title —
+  /// that string is how episodes are attributed.
+  title String @unique
+
+  /// Game system or campaign, from the third title segment. Display only.
+  system      String?
+  description String?
+  artworkUrl  String?
+  /// Case-insensitive regex claiming episodes whose titles never use the
+  /// "episode | show | system" format (Cannon Fodder, GCN News Minute…).
+  /// Only ever set by hand or by the seed; the feed never supplies it.
+  matchPattern String?
+
+  /// The Patreon collection this show is published into — what Patreon's own
+  /// API and a patron's RSS URL (`&show=<id>`) call a show. Null for a show
+  /// that isn't on Patreon. Seeded for the public shows whose Patreon
+  /// collection title doesn't match their own, and set by ingest for the rest;
+  /// see src/feed/patreon.ts. A client holding a patron's feed token appends
+  /// this to that feed's URL to fetch the audio the API never serves.
+  patreonShowId String? @unique
+  /// False for a show that exists only on Patreon. Its episodes have no public
+  /// audio at all, so a client with no Patreon token has nothing it can play —
+  /// and a client that predates Patreon is never sent the show (see
+  /// src/routes/shows.ts). Ingest sets it when it creates a show from a Patreon
+  /// collection, and turns it on — never off — once a public feed carries it.
+  isPublic      Boolean @default(true)
+
+  /// Set the moment a person edits this show in the dashboard. Ingest skips an
+  /// overridden row entirely — not field by field, the whole row — so a
+  /// correction survives every future run of a feed that disagrees with it.
+  /// The cost is that it freezes the row: a show edited for its description
+  /// stops taking new artwork from the feed too.
+  overridden Boolean @default(false)
+  /// Fingerprint of the feed-derived fields (title, system, artwork), as of
+  /// the last run that wrote them. Null until a run has seen this show — every
+  /// row predating the column reads as changed once, which is deliberate: the
+  /// old ingest could not have applied an upstream edit, so the first
+  /// reconciling run is the one that finally does. See src/feed/hash.ts.
+  hash       String?
+
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  /// The delta cursor. Moves when a person edits this show, when ingest finds
+  /// the feed has changed it, and when its episodes change (see src/touch.ts) —
+  /// which is what lets a client skip the shows that didn't.
+  updatedAt DateTime @updatedAt      @db.Timestamptz(3)
+  /// Soft delete. A `?since=` delta cannot report a row that is simply gone —
+  /// it would read as "unchanged" — so deleting sets this and bumps
+  /// `updatedAt`, and the tombstone travels to clients like any other change.
+  deletedAt DateTime?                @db.Timestamptz(3)
+
+  episodes Episode[]
+
+  /// `where updatedAt > $since order by updatedAt, id` — the whole point.
+  @@index([updatedAt, id])
+  @@map("shows")
+}
+
+model Episode {
+  id     String  @id @default(cuid())
+  /// Null when the title couldn't be attributed to any show. Kept rather
+  /// than dropped, so a feed format change surfaces as a number in the sync
+  /// result instead of episodes quietly going missing.
+  showId String?
+  show   Show?   @relation(fields: [showId], references: [id], onDelete: SetNull)
+
+  /// The RSS <guid>: an item's stable identity within one feed. Not stable
+  /// *across* feeds — see the cross-post note in src/feed/sync.ts. An episode
+  /// first seen on Patreon is `patreon:<post id>`, and keeps that guid after
+  /// the public feed catches up with it: the phones key on it.
+  guid            String   @unique
+  /// Cleaned title, with the show and system segments stripped off.
+  title           String
+  /// The full item title as published, kept so parsing can be re-run or audited.
+  rawTitle        String
+  description     String?
+  /// The public enclosure. Null for an episode that so far exists only on
+  /// Patreon — a Patreon-only show's, or an early release of a public one.
+  /// The API has no patron's audio to give out and would not give it if it
+  /// did: a patron's enclosure URL carries their own feed token. Clients fetch
+  /// it themselves, from the patron's feed, by `patreonPostId`.
+  audioUrl        String?
+  /// The Patreon post this episode was first ingested from, which is also the
+  /// `<guid>` of the item in a patron's feed — how a client with a token finds
+  /// the audio. Kept when the public feed catches up and fills `audioUrl`, so
+  /// the row, and its guid on every phone, stays the same episode.
+  patreonPostId   String?  @unique
+  /// When Patreon published `patreonPostId` — often months before the public
+  /// feed. A client with a Patreon token lists episodes by this, so an early
+  /// release sits in order among the public episodes it came before rather
+  /// than behind all of them. Null wherever `patreonPostId` is.
+  patreonPublishedAt DateTime? @db.Timestamptz(3)
+  durationSeconds Int?
+  publishedAt     DateTime @db.Timestamptz(3)
+  season          Int?
+  number          Int?
+  /// True when `number` was derived from release order rather than published
+  /// in the feed. Without this the next run cannot tell a number it invented
+  /// from one the network supplied, and would stop filling the show it had
+  /// just filled. It also keeps a derived number alive across a reconciling
+  /// run: the feed supplies none, so there is nothing to overwrite it with,
+  /// and sync writes `number` only when the feed actually carries one. See
+  /// src/feed/plan.ts.
+  numberIsDerived Boolean  @default(false)
+  artworkUrl      String?
+  /// The episode's video version on YouTube, where the feed mentions one. The
+  /// Acast per-show feeds put it in `<item><link>`; the main Megaphone feed
+  /// mostly writes it into the description prose. Null is ordinary: nothing
+  /// before 2020 was filmed, and Blood of the Wild and GCN News Minute never
+  /// are.
+  videoUrl        String?
+
+  /// Set the moment a person edits this episode in the dashboard — including
+  /// deleting it, which is what stops a later run rewriting a tombstone.
+  /// Ingest skips an overridden row entirely. Attributing one of the nine
+  /// unattributed episodes by hand therefore sticks for good, even though the
+  /// title it was attributed from still parses to nothing.
+  overridden      Boolean  @default(false)
+  /// Fingerprint of the feed-derived fields, as of the last run that wrote
+  /// them. Null until a run has seen this episode. See src/feed/hash.ts.
+  hash            String?
+
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt      @db.Timestamptz(3)
+  /// Soft delete — see Show.deletedAt. This is the one that matters in
+  /// practice: it is how an episode disappears from a phone.
+  deletedAt DateTime?                @db.Timestamptz(3)
+
+  @@index([showId, updatedAt, id])   // the delta query
+  @@index([showId, publishedAt])     // listening order
+  @@index([updatedAt, id])           // a future global /episodes delta
+  @@map("episodes")
+}
+
+/// One run of the ingest. Worth keeping: the numbers it records (episodes
+/// created, cross-posts skipped, unattributed) are how a feed format change
+/// gets noticed.
+model FeedSyncRun {
+  id                String         @id @default(cuid())
+  startedAt         DateTime       @default(now()) @db.Timestamptz(3)
+  finishedAt        DateTime?      @db.Timestamptz(3)
+  status            FeedSyncStatus @default(RUNNING)
+  itemsSeen         Int            @default(0)
+  itemsCreated      Int            @default(0)
+  /// Stored episodes the feed had changed since they were ingested. Zero on a
+  /// quiet night; a number here means an upstream edit reached the phones.
+  episodesUpdated   Int            @default(0)
+  showsUpdated      Int            @default(0)
+  /// Rows the feed disagrees with that a person has edited, so they stand.
+  overriddenSkipped Int            @default(0)
+  /// Episodes a per-show feed re-publishes that another feed already carries.
+  duplicatesSkipped Int            @default(0)
+  itemsUnattributed Int            @default(0)
+  /// Episodes given a number derived from release order.
+  numbersDerived    Int            @default(0)
+  showsCreated      Int            @default(0)
+  /// Feeds that couldn't be fetched, by name. The rest still synced.
+  failedFeeds       String[]       @default([])
+  error             String?
+
+  @@index([startedAt])
+  @@map("feed_sync_runs")
+}
+
+enum FeedSyncStatus {
+  RUNNING
+  SUCCEEDED
+  FAILED
+}
+
+// ─── Staff ───────────────────────────────────────────────────────────────────
+//
+// Everyone who may edit the catalogue. There is no registration endpoint and
+// no role column: a staff row is created by another staff member (or by
+// `npm run db:staff` for the first one), and holding one means you can edit
+// everything. The catalogue is 32 shows maintained by a handful of people —
+// a role model would be more machinery than there is anything to protect.
+
+/// A person who may edit the catalogue.
+model Staff {
+  id    String @id @default(cuid())
+  /// Always lowercase: the address is the identity, and `Ada@` and `ada@`
+  /// must not be two accounts. Normalised at every entry point.
+  email String @unique
+  name  String
+
+  createdAt   DateTime  @default(now()) @db.Timestamptz(3)
+  updatedAt   DateTime  @updatedAt      @db.Timestamptz(3)
+  lastLoginAt DateTime?                 @db.Timestamptz(3)
+
+  /// HMAC of the emailed sign-in code, never the code itself — a database
+  /// dump alone cannot be replayed into a session.
+  otpHash      String?
+  otpExpiresAt DateTime? @db.Timestamptz(3)
+  /// Guards the six-digit code against being worked through within its ten
+  /// minutes. Reset whenever a new code is issued.
+  otpAttempts  Int       @default(0)
+
+  sessions StaffSession[]
+
+  @@map("staff")
+}
+
+/// One signed-in browser. Sessions are rows rather than self-contained JWTs so
+/// that deleting a staff member ends their access immediately — the cascade
+/// below is the whole reason.
+model StaffSession {
+  id      String @id @default(cuid())
+  staffId String
+  staff   Staff  @relation(fields: [staffId], references: [id], onDelete: Cascade)
+
+  /// SHA-256 of the bearer token. The token itself is shown once, to the
+  /// browser that earned it, and never stored.
+  tokenHash String   @unique
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  expiresAt DateTime @db.Timestamptz(3)
+
+  @@index([staffId])
+  /// The sweep that clears expired rows.
+  @@index([expiresAt])
+  @@map("staff_sessions")
+}

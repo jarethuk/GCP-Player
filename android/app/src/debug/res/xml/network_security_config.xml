@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Debug builds only, and the release manifest never references this file.
+
+  Android has refused cleartext HTTP by default since API 28, which makes a
+  debug build unable to reach an API running on the development machine. The
+  emulator sees that machine as 10.0.2.2 — never as localhost, which from
+  inside the emulator is the emulator.
+
+  The iOS app carries the same exception as NSAllowsLocalNetworking in its
+  Info.plist; here it is narrowed to the two hosts that can only ever mean
+  "this developer's own machine", and confined to the debug variant.
+-->
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="false">10.0.2.2</domain>
+        <domain includeSubdomains="false">localhost</domain>
+    </domain-config>
+</network-security-config>

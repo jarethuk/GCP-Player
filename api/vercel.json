@@ -1,0 +1,32 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "outputDirectory": "public",
+  "installCommand": "npm ci --include=dev",
+  "buildCommand": "npx prisma generate && npx prisma migrate deploy && npx tsx prisma/seed.ts",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/api/index"
+    }
+  ],
+  "functions": {
+    "api/index.ts": {
+      "maxDuration": 60
+    }
+  },
+  "crons": [
+    {
+      "path": "/cron/sync",
+      "schedule": "0-20/10 4,5 * * *"
+    },
+    {
+      "path": "/cron/sync",
+      "schedule": "*/10 13-22 * * *"
+    },
+    {
+      "path": "/cron/sync",
+      "schedule": "30 0-3,6-12,23 * * *"
+    }
+  ]
+}

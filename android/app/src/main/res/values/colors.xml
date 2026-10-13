@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The two tokens Android itself needs outside Compose: the window and splash
+  background, and the adaptive icon's backdrop. Everything else the app draws
+  reads ui/theme/Color.kt.
+-->
+<resources>
+    <color name="ink">#03253F</color>
+</resources>

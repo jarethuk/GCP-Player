@@ -1,0 +1,293 @@
+# All the user-facing text in the iPhone, iPad, Apple TV, Android and web apps.
+#
+# Edit here, then build any app — or run scripts/generate-copy.py — and it
+# lands in all of them: Copy.xcstrings and Copy.swift on iOS,
+# res/values/copy.xml on Android, src/copy/copy.ts on the web. See
+# copy/README.md for the format.
+#
+#   {name}          a placeholder; {name:int} for a number
+#   **bold**        bold
+#   [text](url)     a link
+#   ios: / android: / web: the text differs by platform — all side by side
+#   one: / other:   singular and plural
+#
+# Write sentence or title case as it should read. Where the design sets a
+# label in capitals (buttons, chips, meta labels) the app uppercases it, so
+# the text here stays readable and screen readers don't spell it out.
+#
+# Lines marked `# was:` are where the two apps had drifted apart and one
+# wording was chosen for both.
+
+app:
+  name: GCN Player
+
+common:
+  ok: OK
+  cancel: Cancel
+  back: Back
+  more: More
+  settings: Settings
+  remove: Remove
+  save: Save
+  paste: Paste
+  checking: Checking
+
+# -- Installing the web app to a home screen. Web only; the native apps never show it.
+
+install:
+  button: Install app
+  title: Install GCN Player
+  iosMessage: >
+    Tap the Share button in Safari's toolbar, then Add to Home Screen. GCN
+    Player opens from there like any other app.
+  macSafariMessage: >
+    In Safari's menu bar, choose File, then Add to Dock. GCN Player opens
+    from there like any other app.
+  otherMessage: >
+    Use the install icon at the end of the address bar, or Install in the
+    browser's menu (Add to Home Screen on a phone). GCN Player opens from
+    there like any other app.
+
+# -- The shows list, the iPad/tablet sidebar and poster wall, CarPlay and Android Auto
+
+shows:
+  eyebrow: Glass Cannon Network
+  title: Shows
+  gridTitle: Every Show
+  myShows: My Shows
+  allShows: All Shows
+  loading: Loading shows
+  # was: "Couldn't load feed" on the phones — it hasn't been a feed since the API.
+  loadFailed: Couldn't load the shows
+  newChip: New
+  a11yNewEpisode: new episode
+  a11yNewEpisodeUnplayed:
+    one: "new episode, {count:int} unplayed"
+    other: "new episode, {count:int} unplayed"
+  a11yLockedNew: new on Patreon, locked
+  unplayedCount:
+    one: "{count:int} unplayed"
+    other: "{count:int} unplayed"
+  allPlayed: All played
+
+# -- A show
+
+show:
+  unplayed: Unplayed
+  played: Played
+  # was: "You've heard every episode." on Apple TV.
+  allCaughtUp: All caught up
+  nothingPlayed: Nothing played yet
+  playNextUnplayed: Play Next Unplayed
+  resumeNextUnplayed: Resume Next Unplayed
+  addToMyShows: Add to My Shows
+  removeFromMyShows: Remove from My Shows
+  inMyShows: In My Shows
+  a11yPlayEpisode: "Play {title}"
+  episodeCount:
+    one: One episode
+    other: "{count:int} episodes"
+
+# -- An episode, and its rows in a show's list
+
+episode:
+  title: Episode
+  unknownShow: Unknown show
+  play: Play
+  pause: Pause
+  loading: Loading
+  duration: "{minutes:int} min"
+  minutesLeft: "{minutes:int} min left"
+  season: "S{season:int}"
+  number: "E{number:int}"
+  a11ySeasonEpisode: "Season {season:int}, episode {number:int}"
+  a11yEpisode: "Episode {number:int}"
+  about: About This Episode
+  noDescription: No description.
+  patreonMark: Patreon
+  lockedTitle: Patreon only
+  a11yLocked: Patreon only, locked
+  lockedPatreonOnlyShow: >
+    This show is only on the network's Patreon. Add your Patreon feed link in
+    Settings to play it.
+  lockedEarlyRelease: >
+    Patrons get this one early. Add your Patreon feed link in Settings to play
+    it now or wait for the public feed.
+
+actions:
+  a11yMenu: Episode actions
+  download: Download
+  removeDownload: Remove Download
+  downloading: Downloading…
+  patreonOnly: Patreon Only
+  markPlayed: Mark as Played
+  markUnplayed: Mark as Unplayed
+  markPreviousPlayed: Mark Previous as Played
+
+youtube:
+  watch: Watch on YouTube
+  a11yWatch: Watch this episode on YouTube
+  a11yWatchHint: Opens YouTube at the point you have listened to
+
+download:
+  progress: "Downloading {percent:int}%"
+  a11yProgress: "Downloading, {percent:int} percent"
+  downloaded: Downloaded
+  a11yDownloaded: Downloaded for offline play
+  streaming: Streaming
+
+# -- Playing
+
+player:
+  nothingPlaying: Nothing playing
+  positionInShow: "{index:int} of {total:int}"
+  a11yPositionInShow: "Episode {index:int} of {total:int}"
+  a11yGoToShow: "Go to {show}"
+  # was: "Play next episode" on Android's notification and car button.
+  playNextEpisode: Play Next Episode
+  a11ySkip: "{seconds:int} seconds"
+  playing: Playing
+  paused: Paused
+  continue: Continue
+  upNext: Up next
+
+# The iPad's keyboard commands, as they appear in the ⌘ overlay.
+keyboard:
+  playPause: Play or Pause
+  back15: Back 15 Seconds
+  forward30: Forward 30 Seconds
+  nextEpisode: Next Episode
+  syncNow: Sync Now
+
+# -- Settings
+
+settings:
+  eyebrow: Preferences
+  title: Settings
+  wifiOnlyTitle: Download over Wi-Fi only
+  wifiOnlyDetail:
+    ios: Episodes run 50–90 MB. On cellular, downloads wait until you're back on Wi-Fi.
+    android: Episodes run 50–90 MB. On mobile data, downloads wait until you're back on Wi-Fi.
+    # Shown only where the browser says which network it's on (Chrome on Android).
+    web: Episodes run 50–90 MB. On mobile data, downloads wait until you're back on Wi-Fi.
+  currentEpisodeTitle: Download what you're playing
+  currentEpisodeDetail: Keeps playing from the stream while the file arrives, then plays it from the device.
+  nextEpisodeTitle: Download the next episode
+  nextEpisodeDetail: Gets the next one in the show ready before you reach it.
+  downloadsNote: Downloads are removed once you've heard them, or after seven days.
+
+  # was: "Clear data and resync" on Apple TV.
+  clearData: Clear Data and Resync
+  clearDataConfirmTitle: Clear data and resync?
+  clearDataConfirm: Clear and Resync
+  clearDataMessage:
+    ios: >
+      Everything on this device is deleted and fetched again, including every
+      downloaded episode. What you've played, where you had got to and your
+      starred shows come back from iCloud.
+    # was: "This deletes every show, episode and download on this device,
+    # including what you've played and where you'd got to, then fetches the
+    # catalogue again."
+    android: >
+      Everything on this device is deleted and fetched again, including every
+      downloaded episode, what you've played and where you had got to.
+    web: >
+      Everything this browser holds is deleted and fetched again, including
+      every downloaded episode, what you've played, where you had got to and
+      your starred shows.
+  clearing: Clearing and resyncing
+  # was: "Resync failed" on Android.
+  clearDataFailedTitle: Couldn't resync
+  # was: iOS only; Android showed the error alone.
+  clearDataFailedNote: The local copy has been cleared. Pull to refresh on the shows list to try again.
+
+  icloud: iCloud
+  icloudSyncing: Played episodes, where you got to and your starred shows carry across to your other devices.
+  icloudLastSynced: "Last synced {when}."
+  icloudNoAccount: Sign in to iCloud on this device to carry played episodes, positions and starred shows across to your other devices.
+  icloudRestricted: iCloud is restricted on this device, so what you play here stays here.
+  icloudUnavailable: iCloud is unavailable at the moment. This device will catch up on its own.
+  icloudChecking: Checking iCloud…
+  # In place of the syncing line while iCloud refuses this device's changes
+  # (a full iCloud, or a record type the production schema doesn't have).
+  # Network trouble never shows these; the engine retries that on its own.
+  icloudStorageFull: Your iCloud storage is full, so what you play here isn't reaching your other devices.
+  icloudSendFailing: What you play here isn't reaching iCloud, so your other devices won't see it. This device keeps trying.
+  icloudFailureReason: "iCloud said: {reason}"
+
+  # The web app's line where the phones say what iCloud or the backup is doing.
+  browser: This browser
+  browserStorage: >
+    Played episodes, where you got to, your starred shows and your downloads
+    are kept in this browser. Downloaded episodes play without a connection.
+
+patreon:
+  label: Patreon
+  intro: Add your Patreon RSS link to unlock the Patreon-only shows and early releases, and to play public episodes without ads.
+  stepLogin: "[Log in to Patreon](https://www.patreon.com/login)"
+  stepOpenShow: "Open [any of the network's shows](https://www.patreon.com/glasscannon)"
+  stepListen: Tap **Listen in app**
+  stepOtherApps: Choose **Other podcast apps**
+  stepCopy: Tap **Copy RSS Link**
+  stepPaste: Paste it below
+  a11yField: Patreon feed link
+  invalidLink: That isn't a Patreon feed link. It should have auth= in it.
+  connected: Connected
+  connectedDetail:
+    ios: >
+      Patreon episodes play, and public episodes play Patreon's ad-free copy
+      wherever there is one. Your link travels to your other devices through
+      iCloud.
+    android: >
+      Patreon episodes play, and public episodes play Patreon's ad-free copy
+      wherever there is one. Your link is kept with the rest of this phone's
+      data, and comes back with it when you restore a backup onto a new phone.
+    web: >
+      Patreon episodes play, and public episodes play Patreon's ad-free copy
+      wherever there is one. Your link is kept in this browser.
+  removeLink: Remove Patreon Link
+  removeConfirmTitle: Remove your Patreon link?
+  removeConfirmMessage:
+    ios: Patreon episodes lock again here and on your other devices. Anything already downloaded stays.
+    android: Patreon episodes lock again. Anything already downloaded stays.
+    web: Patreon episodes lock again in this browser.
+  errorNoToken: Add your Patreon feed link in Settings to play this.
+  errorNotOnPatreon: This episode isn't on Patreon.
+  errorRejected: Patreon didn't accept your feed link. Paste a fresh one in Settings.
+  errorStatus: "Patreon answered {status:int}."
+  errorNotInFeed: Patreon's feed doesn't have this episode.
+  errorUnreachable: Patreon couldn't be reached.
+
+# -- Errors from the catalogue and the player
+
+errors:
+  catalogueStatus: "The catalogue service answered {status:int}."
+  showGone: That show is no longer in the catalogue.
+  catalogueUnreachable: Couldn't reach the catalogue.
+  playFailed: Couldn't play this episode.
+
+# -- Android's system surfaces
+
+notifications:
+  downloadsChannel: Downloads
+
+# -- Apple TV only
+
+tv:
+  home: Home
+  nowPlaying: Now Playing
+  newThisWeek: New This Week
+  resume: Resume
+  a11yEpisodeFilter: Episodes
+  remoteHint: 15 s back  ·  30 s forward — click the edges of the remote
+  upNextEpisode: "Up next · {episode}"
+  playNextNamed: "Play Next: {title}"
+  storageNote: Apple TV streams every episode, so nothing is stored here that can't come back from the network and from iCloud.
+  clearDataMessage: >
+    The shows and episodes on this Apple TV are deleted and fetched again.
+    What you've played, where you had got to and your starred shows come back
+    from iCloud.
+  icloudSyncing: Played episodes, where you got to and your starred shows carry across from your iPhone and iPad.
+  icloudNoAccount: Sign in to iCloud in the Apple TV's Settings to pick up where you left off on your other devices.
+  icloudRestricted: iCloud is restricted on this Apple TV, so what you play here stays here.
+  icloudUnavailable: iCloud is unavailable at the moment. This Apple TV will catch up on its own.

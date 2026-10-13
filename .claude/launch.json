@@ -1,0 +1,88 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "dashboard",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "dashboard",
+        "run",
+        "dev"
+      ],
+      "port": 7350
+    },
+    {
+      "name": "api",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "api",
+        "run",
+        "dev"
+      ],
+      "port": 7331
+    },
+    {
+      "name": "storybook",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "dashboard",
+        "run",
+        "storybook"
+      ],
+      "port": 7351
+    },
+    {
+      "name": "web",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "web",
+        "run",
+        "dev"
+      ],
+      "port": 7360
+    },
+    {
+      "name": "web-storybook",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "web",
+        "run",
+        "storybook",
+        "--",
+        "--no-open"
+      ],
+      "port": 7361
+    },
+    {
+      "name": "dashboard-local-api",
+      "runtimeExecutable": "env",
+      "runtimeArgs": [
+        "VITE_API_BASE_URL=http://localhost:7364",
+        "npm",
+        "--prefix",
+        "dashboard",
+        "run",
+        "dev"
+      ],
+      "port": 7350
+    },
+    {
+      "name": "web-components-storybook",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "web-components",
+        "run",
+        "storybook",
+        "--",
+        "--no-open"
+      ],
+      "port": 7362
+    }
+  ]
+}

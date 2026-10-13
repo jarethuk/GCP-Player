@@ -1,0 +1,45 @@
+.numbers {
+  display: flex;
+  gap: var(--gap-md);
+  flex-wrap: wrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.number {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+.numberValue {
+  font-weight: 700;
+  color: var(--bone);
+}
+
+/* A number that is only interesting when it isn't zero. */
+.attention .numberValue {
+  color: var(--ember);
+}
+
+.failure {
+  margin-top: 6px;
+  font-size: 12.5px;
+  color: var(--ember);
+}
+
+.feedName {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.feedUrl {
+  font-size: 11px;
+  color: rgb(157 184 204 / 0.7);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 52ch;
+}

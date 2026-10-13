@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- The Apple TV target's half of Info.plist. The generated half comes
+	     from the target's INFOPLIST_KEY_ build settings, as on iOS. No
+	     CarPlay scene and no downloads session: neither exists on a TV. -->
+
+	<!-- audio: keep playing when someone leaves for the home screen or the
+	     screensaver comes on. remote-notification: CloudKit's silent pushes,
+	     so a position saved on the phone is already here when the TV wakes. -->
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>audio</string>
+		<string>remote-notification</string>
+	</array>
+	<!-- The network's navy while the app starts, rather than black. -->
+	<key>UILaunchScreen</key>
+	<dict>
+		<key>UIColorName</key>
+		<string>LaunchBackground</string>
+	</dict>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
+	<!-- The same catalogue API as the phone, and the same launch-argument
+	     override (-APIBaseURL http://localhost:7331). -->
+	<key>APIBaseURL</key>
+	<string>https://gcp-player-api.vercel.app</string>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsLocalNetworking</key>
+		<true/>
+	</dict>
+	<!-- Bundled from the shared GCP Player/Fonts folder. -->
+	<key>UIAppFonts</key>
+	<array>
+		<string>ArchivoBlack-Regular.ttf</string>
+		<string>OpenSans-Regular.ttf</string>
+		<string>OpenSans-SemiBold.ttf</string>
+		<string>OpenSans-Bold.ttf</string>
+	</array>
+</dict>
+</plist>
